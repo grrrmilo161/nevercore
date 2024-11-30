@@ -12,11 +12,11 @@ function rectangle(x,y,w,h)
 	return {x=x,y=y,w=w,h=h}
 end
 
---global tables
+-- global tables
 objects,got_fruit={},{}
---global timers
+-- global timers
 freeze,delay_restart,sfx_timer,music_timer,ui_timer=0,0,0,0,-99
---global camera values
+-- global camera values
 draw_x,draw_y,cam_x,cam_y,cam_spdx,cam_spdy,cam_gain=0,0,0,0,0,0,0.25
 
 -- [entry point]
@@ -147,7 +147,7 @@ function _update()
 		(obj.type.update or stat)(obj)
 	end)
 
-	--move camera to player
+	-- move camera to player
 	foreach(objects,function(obj)
 		if obj.type==player or obj.type==player_spawn then
 			move_camera(obj)
@@ -214,7 +214,7 @@ function _draw()
 		end
 	end)
 
-	--set cam draw position
+	-- set cam draw position
 	draw_x=round(cam_x)-64
 	draw_y=round(cam_y)-64
 	camera(draw_x,draw_y)
@@ -222,10 +222,10 @@ function _draw()
 	-- draw bg terrain
 	map(lvl_x,lvl_y,0,0,lvl_w,lvl_h,4)
 	
-	--set draw layering
-	--positive layers draw after player
-	--layer 0 draws before player, after terrain
-	--negative layers draw before terrain
+	-- set draw layering
+	-- positive layers draw after player
+	-- layer 0 draws before player, after terrain
+	-- negative layers draw before terrain
 	local pre_draw,post_draw={},{}
 	foreach(objects,function(obj)
 		local draw_grp=obj.layer<0 and pre_draw or post_draw
@@ -513,7 +513,6 @@ function kill_player(obj)
 	sfx"0"
 	deaths+=1
 	destroy_object(obj)
-	--dead_particles={}
 	for dir=0,0.875,0.125 do
 		add(dead_particles,{
 			x=obj.x+4,
@@ -639,7 +638,7 @@ fall_floor={
 			this.delay-=1
 			if this.delay<=0 then
 				this.state=2
-				this.delay=60--how long it hides for
+				this.delay=60 -- how long it hides for
 				this.collideable=false
 				set_springs(this,false)
 			end
@@ -666,7 +665,7 @@ function break_fall_floor(obj)
 	if obj and obj.state==0 then
 		psfx"15"
 		obj.state=1
-		obj.delay=15--how long until it falls
+		obj.delay=15 -- time until it falls
 		obj.init_smoke()
 	end
 end
@@ -752,7 +751,7 @@ fly_fruit={
 		this.sfx_delay=8
 	end,
 	update=function(this)
-		--fly away
+		-- fly away
 		if has_dashed then
 			if this.sfx_delay>0 then
 				this.sfx_delay-=1
@@ -851,7 +850,7 @@ end
 key={
 	update=function(this)
 		this.spr=flr(9.5+sin(frames/30))
-		if frames==18 then --if spr==10 and previous spr~=10
+		if frames==18 then -- if spr==10 and previous spr~=10
 			this.flip.x=not this.flip.x
 		end
 		if this.player_here() then
@@ -892,7 +891,7 @@ platform={
 	end,
 	update=function(this)
 		this.spd.x=this.dir*0.65
-		--screenwrap
+		-- screenwrap
 		if this.x<-16 then
 			this.x=lvl_pw
 		elseif this.x>lvl_pw then
@@ -1026,7 +1025,7 @@ flag={
 -- [object class]
 
 function init_object(type,x,y,tile)
-	--generate and check berry id
+	-- generate and check berry id
 	local id=x..","..y..","..lvl_id
 	if type.check_fruit and got_fruit[id] then
 		return
@@ -1035,9 +1034,9 @@ function init_object(type,x,y,tile)
 	local obj={
 		type=type,
 		collideable=true,
-		--collides=false,
+		-- collides=false,
 		spr=tile,
-		flip=vector(),--false,false
+		flip=vector(),
 		x=x,
 		y=y,
 		hitbox=rectangle(0,0,8,8),
@@ -1085,7 +1084,7 @@ function init_object(type,x,y,tile)
 		other.top()<=obj.bottom()+oy
 	end
 
-	--returns first object of type colliding with obj
+	-- returns first object of type colliding with obj
 	function obj.check(type,ox,oy)
 		for other in all(objects) do
 			if other and other.type==type and other~=obj and obj.objcollide(other,ox,oy) then
@@ -1094,7 +1093,7 @@ function init_object(type,x,y,tile)
 		end
 	end
 	
-	--returns all objects of type colliding with obj
+	-- returns all objects of type colliding with obj
 	function obj.check_all(type,ox,oy)
 		local tbl={}
 		for other in all(objects) do
@@ -1130,7 +1129,7 @@ function init_object(type,x,y,tile)
 						break
 					end
 				end
-				movamt=obj[axis]-p --save how many px moved to use later for solids
+				movamt=obj[axis]-p -- save how many px moved to use later for solids
 			else
 				movamt=amt
 				if (obj.solid_obj or obj.semisolid_obj) and upmoving and riding then
@@ -1185,7 +1184,7 @@ function move_camera(obj)
 	cam_x+=cam_spdx
 	cam_y+=cam_spdy
 
-	--clamp camera to level boundaries
+	-- clamp camera to level boundaries
 	local clamped=mid(cam_x,64,lvl_pw-64)
 	if cam_x~=clamped then
 		cam_spdx=0
@@ -1211,7 +1210,7 @@ end
 function next_level()
 	local next_lvl=lvl_id+1
 
-	--check for music trigger
+	-- check for music trigger
 	if music_switches[next_lvl] then
 		music(music_switches[next_lvl],500,7)
 	end
@@ -1222,18 +1221,18 @@ end
 function load_level(id)
 	has_dashed,has_key= false
 
-	--remove existing objects
+	-- remove existing objects
 	foreach(objects,destroy_object)
 
-	--reset camera speed
+	-- reset camera speed
 	cam_spdx,cam_spdy=0,0
 
 	local diff_level=lvl_id~=id
 
-	--set level index
+	-- set level index
 	lvl_id=id
 
-	--set level globals
+	-- set level globals
 	local tbl=split(levels[lvl_id])
 	for i=1,4 do
 		_ENV[split"lvl_x,lvl_y,lvl_w,lvl_h"[i]]=tbl[i]*16
@@ -1241,13 +1240,13 @@ function load_level(id)
 	lvl_title=tbl[5]
 	lvl_pw,lvl_ph=lvl_w*8,lvl_h*8
 
-	--level title setup
+	-- level title setup
 	ui_timer=5
 
-	--reload map
+	-- reload map
 	if diff_level then
 		reload()
-		--check for mapdata strings
+		-- check for mapdata strings
 		if mapdata[lvl_id] then
 			replace_mapdata(lvl_x,lvl_y,lvl_w,lvl_h,mapdata[lvl_id])
 		end
@@ -1264,7 +1263,7 @@ function load_level(id)
 	end
 end
 
---replace mapdata with hex
+-- replace mapdata with hex
 function replace_mapdata(x,y,w,h,data)
 	for i=1,#data,2 do
 		mset(x+i\2%w,y+i\2\w,"0x"..sub(data,i,i+1))
@@ -1274,22 +1273,22 @@ end
 -- [metadata]
 
 --@begin
---level table
---"x,y,w,h,title"
+-- level table
+-- "x,y,w,h,title"
 levels={
 	"0,0,2,2",
 	"0,2,2,1",
 	"0,0,1,1,summit",
 }
 
---mapdata string table
---assigned levels will load from here instead of the map
+-- mapdata string table
+-- assigned levels will load from here instead of the map
 mapdata={
 	[3]="00000000000000000000000000000000000000000000000000000000000000000000000000003a00000000000000000000000000000010000039000000000000000000003a00280000380000000000000000000028672800001000390000000000000000283828760028672800000000000000002a28282123283829000000000000006838282125252328393a0000000000002a28212548252523283868000058586828292425252525261028286800281028380031322525482629002a2800002a28393f2123242532332000002800000021222225263133212223283928670100312525482522222525252310382821222324252525252525482525222223"
 }
 
---list of music switch triggers
---assigned levels will start the tracks set here
+-- list of music switch triggers
+-- assigned levels will start the tracks set here
 music_switches={
 	[2]=20,
 	[3]=30
@@ -1297,8 +1296,8 @@ music_switches={
 
 --@end
 
---tiles stack
---assigned objects will spawn from tiles set here
+-- tiles stack
+-- assigned objects will spawn from tiles set here
 tiles={}
 foreach(split([[
 1,player_spawn
@@ -1331,7 +1330,7 @@ and can be safely removed!
 
 --]]
 
---copy mapdata string to clipboard
+-- copy mapdata string to clipboard
 function get_mapdata(x,y,w,h)
 	local reserve=""
 	for i=0,w*h-1 do
@@ -1340,7 +1339,7 @@ function get_mapdata(x,y,w,h)
 	printh(reserve,"@clip")
 end
 
---convert mapdata to memory data
+-- convert mapdata to memory data
 function num2hex(v)
 	return sub(tostr(v,true),5,6)
 end
