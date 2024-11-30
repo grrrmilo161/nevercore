@@ -19,8 +19,8 @@ A fork of [Smalleste](https://github.com/CelesteClassic/smalleste) with addition
 
 ## Level Table
 
-Evercore uses a completely reworked level system: Rather than simply loading rooms using coordinates, Evercore uses a table of level strings, each containing the coordinates, size, and name of the level.
-The level table uses the following format:
+Evercore uses a completely reworked level system: Rather than simply loading rooms using coordinates, Evercore pulls from a table of level strings, each containing the coordinates, size, and name of the level.
+The level table is constructed using the following format:
 
 `[id]="[x],[y],[w],[h],[title]",`
 
@@ -82,7 +82,8 @@ The default Evercore cart hex loads Summit if you want to see a better example o
   * ui_timer - Tracks how many frames the level title should display on screen.
   
   * time_ticking - Whether the speedrun timer is running. The flag object sets this to false when touched. Berries will not be counted if grabbed while this false
-  * fruit_count - How many berries the player has collected.
+  * collected - The unique ID of every berry the player has collected. Objects with the "is_fruit" type variable set to true will not initialize if their id is contained here
+  * fruit_count - How many berries the player has collected
   
 #### Object Variables
 
@@ -103,9 +104,9 @@ The default Evercore cart hex loads Summit if you want to see a better example o
   
   * hitbox - A rectangle containing integers. Used to calculate the position and size of the object's hitbox
   
-  * fruit_id - The berry index position of the object. Generated for all objects, but only used if the object type has fruit_check set to true
+  * id - A unique identifier generated for every object based on their position.
   
 #### Object Type Variables
 
-  * layer - Which layer to draw the object to
-  * fruit_check - Whether the object should check if its berry index position is stored in the got_fruit table before being initialized
+  * layer - Which layer to draw the object on
+  * is_fruit - Whether the object should check if its ID is stored in the `collected` table before being initialized.
