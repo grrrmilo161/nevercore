@@ -3,19 +3,19 @@ A fork of [Smalleste](https://github.com/CelesteClassic/smalleste) with addition
 
 ## Features
 
-  - Large / scrolling level support
-  - Level table system and mapdata string loading
-  - Moving solid / semisolid object system
-  - Prebuilt horizontal springs and jumpthroughs
-  - Object draw layering
-  - Support for multiple berries per level
-  - Tons of free tokens
-  - Lots of free sprite space
-  - Backwards compatible with vanilla levels
+- Large / scrolling level support
+- Level table system and mapdata string loading
+- Moving solid / semisolid object system
+- Prebuilt horizontal springs and jumpthroughs
+- Object draw layering
+- Support for multiple berries per level
+- Tons of free tokens
+- Lots of free sprite space
+- Backwards compatible with vanilla levels
 
 ## Info
 
-  [If you need help getting started, consider joining the Celeste Classic Discord and hopping over to #mod-dev!](https://discord.com/invite/9Dm3NCS)
+[If you need help getting started, consider joining the Celeste Classic Discord and hopping over to #mod-dev!](https://discord.com/invite/9Dm3NCS)
 
 ## Level Table
 
@@ -30,9 +30,9 @@ These values are unpacked into the lvl_ variables when load_level() is called.
 
 ## Mapdata Table
 
-To load a level from a mapdata string, also known as **hex loading**, first you'll need to open the cart with the level you're trying to copy and run the **get_mapdata()** function, using the map position and size of the level. This will generate a **mapdata string** and copy it into your clipboard.
-Then, open the cart you're trying to load the level in and add a new **level string** to the **level table**. Set it's coordinates to (0,0) and use the same size as the level you're trying to load. It's okay if this overlaps with other levels, as that section of the map will be temporarily overwritten (and restored upon leaving the level).
-Finally, paste the mapdata string into the **mapdata table** at the same index as the level string you added to the levels table.
+To load a level from a mapdata string, also known as **hex loading**, first you'll need to open the cart with the level you're trying to copy and run the `get_mapdata()` function, using the map position and size of the level. This will generate a **mapdata string** and copy it into your clipboard.
+Then, open the cart you're trying to load the level in and add a new **level string** to the `levels` table. Set it's coordinates to (0,0) and use the same size as the level you're trying to load. It's okay if this overlaps with other levels, as that section of the map will be temporarily overwritten (and restored upon leaving the level).
+Finally, paste the mapdata string into the `mapdata` table at the same index as the level string you added to the levels table.
 
 The default Evercore cart hex loads Summit if you want to see a better example on how to set this up.
 
@@ -40,9 +40,9 @@ The default Evercore cart hex loads Summit if you want to see a better example o
 
 Evercore uses a layer system to draw its objects. Layers can be assigned to any object as a number variable - typically in the object's init function, but it can be changed at any time. As a general rule, objects on higher numbered layers are drawn later, resulting in them appearing on top of other objects.
 
-- Objects on layers 2+ will be drawn above the player
-- The player is drawn on layer 1 - drawing other objects on this layer will result in undefined behavior
-- Objects on layer 0 will be drawn below the player, but above the terrain - this is the default layer
+- Objects on layers 2+ will be drawn above the player.
+- The player is drawn on layer 1 - drawing other objects on this layer will result in undefined behavior.
+- Objects on layer 0 will be drawn below the player, but above the terrain - this is the default layer.
 - Objects on negative layers will be drawn below the terrain.
 
 ## Documentation
