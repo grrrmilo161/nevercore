@@ -13,7 +13,7 @@ function rectangle(x,y,w,h)
 end
 
 -- global tables
-objects,got_fruit={},{}
+objects,collected={},{}
 -- global timers
 freeze,delay_restart,sfx_timer,music_timer,ui_timer=0,0,0,0,-99
 -- global camera values
@@ -731,7 +731,7 @@ smoke={
 }
 
 fruit={
-	check_fruit=true,
+	is_fruit=true,
 	init=function(this)
 		this.start=this.y
 		this.off=0
@@ -744,7 +744,7 @@ fruit={
 }
 
 fly_fruit={
-	check_fruit=true,
+	is_fruit=true,
 	init=function(this)
 		this.start=this.y
 		this.step=0.5
@@ -786,7 +786,7 @@ function check_fruit(this)
 		hit.djump=max_djump
 		sfx_timer=20
 		sfx"13"
-		got_fruit[this.fruit_id]=true
+		collected[this.id]=true
 		init_object(lifeup,this.x,this.y)
 		destroy_object(this)
 		if time_ticking then
@@ -814,7 +814,7 @@ lifeup={
 }
 
 fake_wall={
-	check_fruit=true,
+	is_fruit=true,
 	init=function(this)
 		this.solid_obj=true
 		this.hitbox=rectangle(0,0,16,16)
@@ -843,7 +843,7 @@ fake_wall={
 function init_fruit(this,ox,oy)
 	sfx_timer=20
 	sfx"16"
-	init_object(fruit,this.x+ox,this.y+oy,26).fruit_id=this.fruit_id
+	init_object(fruit,this.x+ox,this.y+oy,26).id=this.id
 	destroy_object(this)
 end
 
@@ -863,7 +863,7 @@ key={
 }
 
 chest={
-	check_fruit=true,
+	is_fruit=true,
 	init=function(this)
 		this.x-=4
 		this.start=this.x
@@ -1026,8 +1026,8 @@ flag={
 
 function init_object(type,x,y,tile)
 	-- generate and check berry id
-	local id=x..","..y..","..lvl_id
-	if type.check_fruit and got_fruit[id] then
+	local id=x..":"..y..":"..lvl_id
+	if type.is_fruit and collected[id] then
 		return
 	end
 
@@ -1043,8 +1043,7 @@ function init_object(type,x,y,tile)
 		spd=vector(0,0),
 		rem=vector(0,0),
 		layer=0,
-		
-		fruit_id=id,
+		id=id,
 	}
 
 	function obj.left() return obj.x+obj.hitbox.x end
