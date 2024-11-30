@@ -656,7 +656,9 @@ fall_floor={
 		end
 	end,
 	draw=function(this)
-		spr(this.state==1 and 26-this.delay/5 or this.state==0 and 23,this.x,this.y) --add an if statement if you use sprite 0 (other stuff also breaks if you do this i think)
+		if this.state~=2 then
+			spr(this.state==1 and 26-this.delay/5 or 23,this.x,this.y)
+		end
 	end,
 }
 
