@@ -679,15 +679,12 @@ end
 
 balloon={
 	init=function(this)
-		this.offset=rnd()
 		this.start=this.y
 		this.timer=0
 		this.hitbox=rectangle(-1,-1,10,10)
 	end,
 	update=function(this)
 		if this.spr==22 then
-			this.offset+=0.01
-			this.y=this.start+sin(this.offset)*2
 			local hit=this.player_here()
 			if hit and hit.djump<max_djump then
 				psfx"6"
@@ -706,9 +703,6 @@ balloon={
 	end,
 	draw=function(this)
 		if this.spr==22 then
-			for i=7,13 do
-				pset(this.x+4+sin(this.offset*2+i/10),this.y+i,6)
-			end
 			draw_obj_sprite(this)
 		end
 	end
