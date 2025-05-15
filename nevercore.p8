@@ -680,7 +680,7 @@ end
 
 balloon={
 	init=function(this)
-		this.activestate=true
+		this.activestate=1
 		this.start=this.y
 		this.timer=0
 		this.hitbox=rectangle(-1,-1,10,10)
@@ -693,7 +693,7 @@ balloon={
 				this.init_smoke()
 				hit.djump=max_djump
 				this.timer=60
-				this.activestate=false
+				this.activestate=0
 			end
 		elseif this.timer>0 then
 			this.timer-=1
@@ -702,7 +702,7 @@ balloon={
 			this.init_smoke()
 			this.activestate=true
 		end
-		if this.activestate==true then
+		if this.activestate==1 then
 			this.spr=22
 		else
 			this.spr=21
