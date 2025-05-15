@@ -702,7 +702,7 @@ balloon={
 			this.init_smoke()
 			this.activestate=true
 		end
-		if this.activestate==true
+		if this.activestate==true then
 			this.spr=22
 		else
 			this.spr=21
