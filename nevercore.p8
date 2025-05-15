@@ -680,6 +680,7 @@ end
 
 balloon={
 	init=function(this)
+		this.activestate=true
 		this.start=this.y
 		this.timer=0
 		this.hitbox=rectangle(-1,-1,10,10)
@@ -691,21 +692,24 @@ balloon={
 				psfx"6"
 				this.init_smoke()
 				hit.djump=max_djump
-				this.spr=0
 				this.timer=60
+				this.activestate=false
 			end
 		elseif this.timer>0 then
 			this.timer-=1
 		else
 			psfx"7"
 			this.init_smoke()
+			this.activestate=true
+		end
+		if this.activestate==true
 			this.spr=22
+		else
+			this.spr=21
 		end
 	end,
 	draw=function(this)
-		if this.spr==22 then
-			draw_obj_sprite(this)
-		end
+		draw_obj_sprite(this)
 	end
 }
 
