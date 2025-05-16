@@ -782,6 +782,25 @@ shield_corner = {
     		this.y1 = this.y
     		this.x2 = this.x
     		this.y2 = this.y
+
+		--scan right for shield_right
+		for obj in all(objects) do
+			if obj.id == "shield_top" and obj.y == this.y then
+				if obj.x > this.x and obj.x > this.x2 then
+					this.x2 = obj.x + 8
+				end
+			end
+		end
+
+		-- scan down for a shield_left
+		for obj in all(objects) do
+			if obj.id == "shield_left" and obj.x == this.x then
+				if obj.y > this.y and obj.y > this.y2 then
+					this.y2 = obj.y + 8
+				end
+			end
+		end
+		
 	end,
 
 	update = function(this)
