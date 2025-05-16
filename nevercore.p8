@@ -678,7 +678,7 @@ function set_springs(obj,state)
 	obj.hitbox=rectangle(0,0,8,8)
 end
 
-balloon={
+singlecrystal={
 	init=function(this)
 		this.activestate=true
 		this.start=this.y
@@ -710,6 +710,32 @@ balloon={
 	end,
 	draw=function(this)
 		draw_obj_sprite(this)
+	end
+}
+
+shieldblock_corner = {
+	x = 10, -- tile coordinates
+	y = 10,
+	init = function(this)
+		this.corner = {x = this.x, y = this.y}
+		this.length = 1
+		this.height = 1
+
+		-- Check rightwards for 83
+		while mget(this.corner.x + this.length, this.corner.y) == 83 do
+			this.length += 1
+		end
+
+		-- Check downwards for 98
+		while mget(this.corner.x, this.corner.y + this.height) == 98 do
+			this.height += 1
+		end
+	end,
+
+	draw = function(this)
+		local tx, ty = this.corner.x, this.corner.y
+		-- draw a visual marker so you can confirm dimensions
+		rect(tx*8, ty*8, (tx+this.length-1)*8+7, (ty+this.height-1)*8+7, 8) -- color 8 = red
 	end
 }
 
@@ -1305,13 +1331,16 @@ foreach(split([[
 18,spring
 19,spring
 20,chest
-22,balloon
+22,singlecrystal
 23,fall_floor
 26,fruit
 45,fly_fruit
 64,fake_wall
+66,shieldcoin
+81,shieldblock_corner
 86,message
 96,big_chest
+99,shieldblock_target
 118,flag
 ]],"\n"),function(t)
  local tile,obj=unpack(split(t))
