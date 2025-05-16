@@ -775,46 +775,37 @@ singlecrystal={
 	end
 }
 
-shieldblock_corner = {
-	get_rect = function(this)
-		local x = this.corner.x
-		local y = this.corner.y
-
-		local tx = x + 1
-		while level_get(tx, y) == 83 do
-			this.length += 1
-			tx += 1
-		end
-
-		local ty = y + 1
-		while level_get(x, ty) == 98 do
-			this.height += 1
-			ty += 1
-		end
-
-		this.length += 1
-		this.height += 1
-
-		-- debugging
-		print("shield size: "..this.length.."x"..this.height, 0, 110, 7)
-	end,
-
+shield_corner = {
 	init = function(this)
 		this.corner = {x = this.x, y = this.y}
-		this.length = 0
-		this.height = 0
-		this.initialized = false
+		this.x1 = this.x
+    		this.y1 = this.y
+    		this.x2 = this.x
+    		this.y2 = this.y
 	end,
 
 	update = function(this)
-		if not this.initialized then
-			this:get_rect()
-			this.initialized = true
-		end
+	end,
+	draw=function(this)
+		draw_obj_sprite(this)
 	end
 }
 
+shield_top = {
+	init = function(this)
+		this.solid_obj=true
+		this.dir=right
+		this.ident="shield_top"
+	end
+}
 
+shield_left = {
+	init = function(this)
+		this.solid_obj=true
+		this.dir=down
+		this.ident="shield_left"
+	end	
+}
 
 fruit={
 	is_fruit=true,
@@ -1396,10 +1387,12 @@ foreach(split([[
 45,fly_fruit
 64,fake_wall
 66,shieldcoin
-82,shieldblock_corner
+82,shield_corner
+83,shield_top
 86,message
 96,big_chest
-99,shieldblock_target
+98,shield_left
+99,shield_target
 118,flag
 ]],"\n"),function(t)
  local tile,obj=unpack(split(t))
