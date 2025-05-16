@@ -686,7 +686,7 @@ balloon={
 		this.hitbox=rectangle(-1,-1,10,10)
 	end,
 	update=function(this)
-		if this.spr==22 then
+		if this.activestate==true then
 			local hit=this.player_here()
 			if hit and hit.djump<max_djump then
 				psfx"6"
