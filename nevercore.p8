@@ -678,7 +678,7 @@ function set_springs(obj,state)
 	obj.hitbox=rectangle(0,0,8,8)
 end
 
-balloon={
+singlecrystal={
 	init=function(this)
 		this.activestate=true
 		this.start=this.y
@@ -1305,7 +1305,7 @@ foreach(split([[
 18,spring
 19,spring
 20,chest
-22,balloon
+22,singlecrystal
 23,fall_floor
 26,fruit
 45,fly_fruit
