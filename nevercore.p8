@@ -780,37 +780,40 @@ shieldblock_corner = {
 		this.corner = {x = this.x, y = this.y}
 		this.length = 0
 		this.height = 0
-		this.solid_obj=true
+		this.initialized = false
+	end,
 
-		this:get_rect()
+	update = function(this)
+		if not this.initialized then
+			this:get_rect()
+			this.initialized = true
+		end
 	end,
 
 	get_rect = function(this)
 		local x = this.corner.x
 		local y = this.corner.y
 
-		-- count right (top edges, tile 83)
 		local tx = x + 1
 		while level_get(tx, y) == 83 do
 			this.length += 1
 			tx += 1
 		end
 
-		-- count down (left edges, tile 98)
 		local ty = y + 1
 		while level_get(x, ty) == 98 do
 			this.height += 1
 			ty += 1
 		end
 
-		-- include the corner itself
 		this.length += 1
 		this.height += 1
 
-		-- debug output
+		-- debugging
 		print("shield size: "..this.length.."x"..this.height, 0, 110, 7)
 	end
 }
+
 
 
 fruit={
