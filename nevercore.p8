@@ -775,61 +775,43 @@ singlecrystal={
 	end
 }
 
-function get_rect(this)
-	local startx = this.x
-	local starty = this.y
-	
-	local height = 1
-	local width = 1
-	
-	while true do
-		local tiledown = mget(startx, starty)
-		if tiledown == 98 then
-			height = height+1
-		else
-			break
-		end
-	end
-	
-	while true do
-		local tileright = mget(startx-width, starty)
-		if tileright == 83 then
-			width = width+1
-		else
-			break
-		end
-	end
-	
-	return height, width
-end
-
 shieldblock_corner = {
 	init = function(this)
+		this.corner = {x = this.x, y = this.y}
+		this.length = 0
+		this.height = 0
 		this.solid_obj=true
-  this.length = 0
-  this.height = 0
+
+		this:get_rect()
 	end,
-	draw = function(this)
-		get_rect(this)
-		draw_obj_sprite(this)
+
+	get_rect = function(this)
+		local x = this.corner.x
+		local y = this.corner.y
+
+		-- count right (top edges, tile 83)
+		local tx = x + 1
+		while level_get(tx, y) == 83 do
+			this.length += 1
+			tx += 1
+		end
+
+		-- count down (left edges, tile 98)
+		local ty = y + 1
+		while level_get(x, ty) == 98 do
+			this.height += 1
+			ty += 1
+		end
+
+		-- include the corner itself
+		this.length += 1
+		this.height += 1
+
+		-- debug output
+		print("shield size: "..this.length.."x"..this.height, 0, 110, 7)
 	end
 }
 
-smoke={
-	init=function(this)
-		this.spd=vector(0.3+rnd"0.2",-0.1)
-		this.x+=-1+rnd"2"
-		this.y+=-1+rnd"2"
-		this.flip=vector(rnd()<0.5,rnd()<0.5)
-		this.layer=3
-	end,
-	update=function(this)
-		this.spr+=0.2
-		if this.spr>=32 then
-			destroy_object(this)
-		end
-	end
-}
 
 fruit={
 	is_fruit=true,
