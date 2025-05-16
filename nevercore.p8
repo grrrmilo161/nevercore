@@ -776,20 +776,6 @@ singlecrystal={
 }
 
 shieldblock_corner = {
-	init = function(this)
-		this.corner = {x = this.x, y = this.y}
-		this.length = 0
-		this.height = 0
-		this.initialized = false
-	end,
-
-	update = function(this)
-		if not this.initialized then
-			this:get_rect()
-			this.initialized = true
-		end
-	end,
-
 	get_rect = function(this)
 		local x = this.corner.x
 		local y = this.corner.y
@@ -811,6 +797,20 @@ shieldblock_corner = {
 
 		-- debugging
 		print("shield size: "..this.length.."x"..this.height, 0, 110, 7)
+	end,
+
+	init = function(this)
+		this.corner = {x = this.x, y = this.y}
+		this.length = 0
+		this.height = 0
+		this.initialized = false
+	end,
+
+	update = function(this)
+		if not this.initialized then
+			this:get_rect()
+			this.initialized = true
+		end
 	end
 }
 
