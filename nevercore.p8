@@ -800,18 +800,19 @@ shield_left = {
 
 shield_corner = {
     init = function(this)
-        this.solid_obj=true
-        this.moved=false
+        this.solid_obj = true
+        this.moved = false
         this.shake_timer = 10
         this.shake_offset_x = 0
         this.shake_offset_y = 0
     end,
-  
+
     update = function(this)
-        this.moved = this.x==shield_targetx and this.y==shield_targety
+        this.moved = this.x == shield_targetx and this.y == shield_targety
+
         if allcollected and not this.moved then
             if this.shake_timer > 0 then
-                -- Shake randomly for a few frames
+                -- Shake randomly
                 this.shake_offset_x = rnd(1) - 0.5
                 this.shake_offset_y = rnd(1) - 0.5
                 this.shake_timer -= 1
@@ -819,45 +820,39 @@ shield_corner = {
                 -- Reset shake
                 this.shake_offset_x = 0
                 this.shake_offset_y = 0
-        
+
                 -- Move toward target with easing
                 local dx = shield_targetx - this.x
                 local dy = shield_targety - this.y
-        
+
                 if abs(dx) < 0.5 and abs(dy) < 0.5 then
                     this.x = shield_targetx
                     this.y = shield_targety
                     this.moved = true
                 else
-                    -- cube-root easing (stronger deceleration near end)
+                    -- cube-root easing
                     local spd_x = dx * 0.15 + sign(dx) * 0.5
                     local spd_y = dy * 0.15 + sign(dy) * 0.5
+
+                    -- 💡 apply speed limit
+                    local max_speed = 2
+                    spd_x = mid(-max_speed, spd_x, max_speed)
+                    spd_y = mid(-max_speed, spd_y, max_speed)
+
                     this.move(spd_x, spd_y, 1)
                 end
             end
         end
-        
 
-
-        this.hitbox.w=(shieldtopcounter+1)*8
-        this.hitbox.h=(shieldleftcounter+1)*8
-      if allcollected then
-        
-      end
+        this.hitbox.w = (shieldtopcounter + 1) * 8
+        this.hitbox.h = (shieldleftcounter + 1) * 8
     end,
-  
+
     draw = function(this)
         draw_block(this)
     end
 }
 
-shield_target = {
-    init = function(this)
-        shield_targetx=this.x
-        shield_targety=this.y
-        this.spr=0
-    end
-}
 counternew=0
 
 gbubble = {
