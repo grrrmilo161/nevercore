@@ -799,61 +799,65 @@ shield_left = {
 }
 
 shield_corner = {
-	init = function(this)
-		this.solid_obj = true
-		this.moved = false
-		this.shake_timer = 10
-		this.shake_offset_x = 0
-		this.shake_offset_y = 0
-	end,
+    init = function(this)
+        this.solid_obj=true
+        this.moved=false
+        this.shake_timer = 10
+        this.shake_offset_x = 0
+        this.shake_offset_y = 0
+    end,
+  
+    update = function(this)
+        this.moved = this.x==shield_targetx and this.y==shield_targety
+        if allcollected and not this.moved then
+            if this.shake_timer > 0 then
+                -- Shake randomly for a few frames
+                this.shake_offset_x = rnd(1) - 0.5
+                this.shake_offset_y = rnd(1) - 0.5
+                this.shake_timer -= 1
+            else
+                -- Reset shake
+                this.shake_offset_x = 0
+                this.shake_offset_y = 0
+        
+                -- Move toward target with easing
+                local dx = shield_targetx - this.x
+                local dy = shield_targety - this.y
+        
+                if abs(dx) < 0.5 and abs(dy) < 0.5 then
+                    this.x = shield_targetx
+                    this.y = shield_targety
+                    this.moved = true
+                else
+                    -- cube-root easing (stronger deceleration near end)
+                    local spd_x = dx * 0.15 + sign(dx) * 0.5
+                    local spd_y = dy * 0.15 + sign(dy) * 0.5
+                    this.move(spd_x, spd_y, 1)
+                end
+            end
+        end
+        
 
-	update = function(this)
-		this.moved = this.x == shield_targetx and this.y == shield_targety
 
-		if allcollected and not this.moved then
-			if this.shake_timer > 0 then
-				this.shake_offset_x = rnd(1) - 0.5
-				this.shake_offset_y = rnd(1) - 0.5
-				this.shake_timer -= 1
-			else
-				this.shake_offset_x = 0
-				this.shake_offset_y = 0
-
-				local dx = shield_targetx - this.x
-				local dy = shield_targety - this.y
-
-				if abs(dx) < 0.5 and abs(dy) < 0.5 then
-					this.x = shield_targetx
-					this.y = shield_targety
-					this.moved = true
-				else
-					-- full intended speed (easing + nudge)
-					local spd_x = dx * 0.15 + sign(dx) * 0.5
-					local spd_y = dy * 0.15 + sign(dy) * 0.5
-
-					-- clamp overall speed to max
-					local mag = sqrt(spd_x * spd_x + spd_y * spd_y)
-					local max_speed = 2
-					if mag > max_speed then
-						local scale = max_speed / mag
-						spd_x *= scale
-						spd_y *= scale
-					end
-
-					this.move(spd_x, spd_y, 1)
-				end
-			end
-		end
-
-		this.hitbox.w = (shieldtopcounter + 1) * 8
-		this.hitbox.h = (shieldleftcounter + 1) * 8
-	end,
-
-	draw = function(this)
-		draw_block(this)
-	end
+        this.hitbox.w=(shieldtopcounter+1)*8
+        this.hitbox.h=(shieldleftcounter+1)*8
+      if allcollected then
+        
+      end
+    end,
+  
+    draw = function(this)
+        draw_block(this)
+    end
 }
 
+shield_target = {
+    init = function(this)
+        shield_targetx=this.x
+        shield_targety=this.y
+        this.spr=0
+    end
+}
 
 counternew=0
 
