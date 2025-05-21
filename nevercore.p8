@@ -777,13 +777,6 @@ function draw_block(this)
     spr(99, this.x + cols*4 - 4 + sx, this.y + rows*4 - 4 + sy)
 end
 
-function move_block(this, targetx, targety, speed)
-	local dx = mid(-speed, targetx - this.x, speed)
-	local dy = mid(-speed, targety - this.y, speed)
-	this.move(dx, dy, 1)
-end
-
-
 shield_top = {
 	init = function(this)
         shieldtopcounter+=1
@@ -830,8 +823,8 @@ shield_corner = {
                     this.moved = true
                 else
                     -- cube-root easing (stronger deceleration near end)
-                    local spd_x = dx * 0.15 + sign(dx) * 0.5
-                    local spd_y = dy * 0.15 + sign(dy) * 0.5
+                    local spd_x = (dx * 0.15 + sign(dx) * 0.5)
+                    local spd_y = (dy * 0.15 + sign(dy) * 0.5)
                     this.move(spd_x, spd_y, 1)
                 end
             end
