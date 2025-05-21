@@ -798,6 +798,7 @@ shield_corner = {
         this.shake_timer = 10
         this.shake_offset_x = 0
         this.shake_offset_y = 0
+		this.maxspeed = 5
     end,
   
     update = function(this)
@@ -823,20 +824,20 @@ shield_corner = {
                     this.moved = true
                 else
                     -- cube-root easing (stronger deceleration near end)
-                    local spd_x = (dx * 0.15 + sign(dx) * 0.5)
-                    local spd_y = (dy * 0.15 + sign(dy) * 0.5)
-                    this.move(spd_x, spd_y, 1)
+                    local spd_x = dx * 0.15 + sign(dx) * 0.5
+					local spd_y = dy * 0.15 + sign(dy) * 0.5
+
+					-- Clamp to maxspeed
+					spd_x = mid(-this.maxspeed, spd_x, this.maxspeed)
+					spd_y = mid(-this.maxspeed, spd_y, this.maxspeed)
+
+					this.move(spd_x, spd_y, 1)
                 end
             end
         end
-        
-
-
+		
         this.hitbox.w=(shieldtopcounter+1)*8
         this.hitbox.h=(shieldleftcounter+1)*8
-      if allcollected then
-        
-      end
     end,
   
     draw = function(this)
